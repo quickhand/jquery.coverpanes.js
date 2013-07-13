@@ -55,12 +55,12 @@
         });
 
 
-        $(".coverpanes-placeholder").height($(window).height()).width($(window).width());
+        $(".coverpanes-placeholder").each(function() { setplaceholderheight(this); });
 
         updateclippings(pages,covers,startWithCover);
 
         $(window).resize(function() {
-            $(".coverpanes-placeholder").height($(window).height()).width($(window).width()); 
+            $(".coverpanes-placeholder").each(function() { setplaceholderheight(this); });
             updateclippings(pages,covers,startWithCover);
         });
 
@@ -69,7 +69,17 @@
         });
    
     };
+    
+    function setplaceholderheight(placeholder) {
+        $(placeholder).width($(window).width());
+        var coverage=$(placeholder).prev().data("coverage");
+        if(coverage && coverage>0 && coverage<100) {
+            $(placeholder).height(Math.round($(window).height()*coverage/100.0));
+        } else {
+            $(placeholder).height($(window).height());
+        }
 
+    }    
 
     function updateclippings(pages,covers,startWithCover) {
         var docViewTop = $(window).scrollTop();
